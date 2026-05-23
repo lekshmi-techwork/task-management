@@ -7,6 +7,8 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 
+use Illuminate\Http\Request;
+
 class TaskController extends Controller
 {
     protected TaskService $taskService;
@@ -20,9 +22,11 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = $this->taskService->getAll();
+        $tasks = $this->taskService->getAll(
+            $request->only(['search', 'status', 'priority'])
+        );
 
         return view('tasks.index', compact('tasks'));
     }

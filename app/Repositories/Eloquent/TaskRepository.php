@@ -14,8 +14,24 @@ class TaskRepository implements TaskRepositoryInterface
         if (auth()->user()->role !== 'admin') {
             $query->where('assigned_to', auth()->id());
         }
+        $query->when(
+            $filters['search'] ?? null,
+            fn($query, $search) => $query->search($search)
+        );
 
-        return $query->paginate(10);
+        $query->when(
+            $filters['status'] ?? null,
+            fn($query, $status) => $query->status($status)
+        );
+
+        $query->when(
+            $filters['priority'] ?? null,
+            fn($query, $priority) => $query->priority($priority)
+        );
+
+        return $query
+            ->paginate(10)
+            ->appends(request()->query());
     }
 
     public function find(int $id)

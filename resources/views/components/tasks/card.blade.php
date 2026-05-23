@@ -23,7 +23,7 @@
             Status
         </span>
         <span class="text-[10px] bg-pink-500 text-white px-2 py-1 rounded-full">
-            {{ $task->priority }}
+            Priority: {{ ucfirst($task->priority) }}
         </span>
     </div>
 
