@@ -1,6 +1,12 @@
 <x-app-layout>
     <div class="min-h-screen bg-[#20283a] px-6 py-5">
         <div class="max-w-[1120px] mx-auto">
+            @if(session('success'))
+            <div class="bg-white text-green-700 px-4 py-3 rounded-lg mb-5">
+                {{ session('success') }}
+            </div>
+            @endif
+
 
             <div class="flex items-center justify-between mb-7">
                 <h1 class="text-white text-4xl font-bold tracking-tight">

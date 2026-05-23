@@ -20,9 +20,17 @@
                         @csrf
 
                         <x-tasks.form :users="$users" />
-
+                        @if ($errors->any())
+                        <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
                         <div class="text-center mt-6">
-                            <button class="bg-blue-500 text-white text-sm font-semibold px-7 py-2 rounded-full shadow">
+                            <button type="submit" class="bg-blue-500 text-white text-sm font-semibold px-7 py-2 rounded-full shadow">
                                 Create Task
                             </button>
                         </div>

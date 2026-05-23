@@ -2,56 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TaskService;
+use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    protected TaskService $taskService;
+
+    public function __construct(
+        TaskService $taskService
+    ) {
+        $this->taskService = $taskService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tasks = [
-            (object)[
-                'title' => 'Launch New Marketing',
-                'status' => 'In Progress',
-                'priority' => 'Priority High',
-                'assigned' => 'Ane and Smith',
-                'due_date' => '2024-12-01',
-                'ai_priority' => 'High',
-                'description' => 'Plan and run multi-channel campaigns for the new product launch.',
-            ],
-            (object)[
-                'title' => 'Develop API Mapping',
-                'status' => 'In Progress',
-                'priority' => 'Priority High',
-                'assigned' => 'John Doe',
-                'due_date' => '2024-12-31',
-                'ai_priority' => 'Low',
-                'description' => 'Develop API integration and mapping flow.',
-            ],
-            (object)[
-                'title' => 'Refactor API Endpoints',
-                'status' => 'In Progress',
-                'priority' => 'Risk Low',
-                'assigned' => 'June Doe',
-                'due_date' => '2024-12-01',
-                'ai_priority' => 'Low',
-                'description' => 'Clean and refactor existing endpoint logic.',
-            ],
-        ];
+        $tasks = $this->taskService->getAll();
 
         return view('tasks.index', compact('tasks'));
     }
+
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $users = [
-            (object) ['id' => 1, 'name' => 'Admin User'],
-            (object) ['id' => 2, 'name' => 'Sany Leton'],
-        ];
+        $users = $this->taskService->getAssignableUsers();
 
         return view('tasks.create', compact('users'));
     }
@@ -59,9 +40,15 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        //
+        $this->taskService->store(
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('tasks.index')
+            ->with('success', 'Task created successfully.');
     }
 
     /**
@@ -69,7 +56,9 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $task = $this->taskService->find($id);
+
+        return view('tasks.show', compact('task'));
     }
 
     /**
@@ -77,20 +66,8 @@ class TaskController extends Controller
      */
     public function edit(string $id)
     {
-        $task = (object) [
-            'id' => $id,
-            'title' => 'Launch New Marketing Campaign',
-            'description' => 'The task is related to a marketing campaign. Need detailed planning and execution.',
-            'priority' => 'low',
-            'status' => 'in_progress',
-            'due_date' => '2024-12-31',
-            'assigned_to' => 2,
-        ];
-
-        $users = [
-            (object) ['id' => 1, 'name' => 'Admin User'],
-            (object) ['id' => 2, 'name' => 'Sany Leton'],
-        ];
+        $task = $this->taskService->find($id);
+        $users = $this->taskService->getAssignableUsers();
 
         return view('tasks.edit', compact('task', 'users'));
     }
@@ -98,9 +75,18 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(
+        UpdateTaskRequest $request,
+        string $id
+    ) {
+        $this->taskService->update(
+            $id,
+            $request->validated()
+        );
+
+        return redirect()
+            ->route('tasks.index')
+            ->with('success', 'Task updated successfully.');
     }
 
     /**

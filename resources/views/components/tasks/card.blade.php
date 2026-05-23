@@ -39,10 +39,12 @@
         </div>
 
         <div class="flex gap-2">
-            <a href="#" class="bg-slate-100 text-slate-700 text-[11px] px-3 py-1 rounded-full">
+            <a href="{{ route('tasks.edit', $task->id) }}"
+                class="bg-slate-100 text-slate-700 text-[11px] px-3 py-1 rounded-full">
                 Edit
             </a>
-            <a href="#" class="bg-blue-500 text-white text-[11px] px-3 py-1 rounded-full">
+            <a href="{{ route('tasks.show', $task->id) }}"
+                class="bg-blue-500 text-white text-[11px] px-3 py-1 rounded-full">
                 View
             </a>
         </div>
