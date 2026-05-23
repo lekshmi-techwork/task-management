@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\TaskService;
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use Illuminate\Http\Request;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
@@ -32,6 +32,7 @@ class TaskController extends Controller
      */
     public function create()
     {
+        $this->authorize('create', Task::class);
         $users = $this->taskService->getAssignableUsers();
 
         return view('tasks.create', compact('users'));
@@ -42,6 +43,7 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
+        $this->authorize('create', Task::class);
         $this->taskService->store(
             $request->validated()
         );
@@ -57,7 +59,7 @@ class TaskController extends Controller
     public function show(string $id)
     {
         $task = $this->taskService->find($id);
-
+        $this->authorize('view', $task);
         return view('tasks.show', compact('task'));
     }
 
@@ -67,6 +69,7 @@ class TaskController extends Controller
     public function edit(string $id)
     {
         $task = $this->taskService->find($id);
+        $this->authorize('update', $task);
         $users = $this->taskService->getAssignableUsers();
 
         return view('tasks.edit', compact('task', 'users'));
@@ -79,6 +82,8 @@ class TaskController extends Controller
         UpdateTaskRequest $request,
         string $id
     ) {
+        $task = $this->taskService->find($id);
+        $this->authorize('update', $task);
         $this->taskService->update(
             $id,
             $request->validated()

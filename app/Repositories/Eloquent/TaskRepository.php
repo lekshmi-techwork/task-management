@@ -9,7 +9,13 @@ class TaskRepository implements TaskRepositoryInterface
 {
     public function all(array $filters = [])
     {
-        return Task::with('user')->latest()->paginate(10);
+        $query = Task::with('user')->latest();
+
+        if (auth()->user()->role !== 'admin') {
+            $query->where('assigned_to', auth()->id());
+        }
+
+        return $query->paginate(10);
     }
 
     public function find(int $id)
