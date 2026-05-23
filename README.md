@@ -104,24 +104,6 @@ app/
 
 ---
 
-## Development Progress
-
-- [x] Laravel 10 project setup
-- [x] Git repository setup
-- [x] Authentication using Breeze
-- [x] User role implementation
-- [x] Task database structure
-- [ ] Repository Pattern
-- [ ] Service Layer
-- [ ] AI Integration
-- [ ] Task CRUD
-- [ ] Policies & Authorization
-- [ ] Dashboard Analytics
-- [ ] REST APIs
-- [ ] Responsive UI
-
----
-
 ## Setup Instructions
 
 ```bash
@@ -145,3 +127,65 @@ php artisan serve
 
 Email: admin@example.com  
 Password: password
+
+## Running the Application
+
+```bash
+php artisan serve
+```
+
+---
+
+## AI Summary Implementation
+
+The AI summary feature is implemented using a dedicated `AIService`.
+
+Current implementation uses a mocked AI approach:
+
+- Generates summary from task description
+- Generates AI priority
+- Supports AI summary refresh flow
+
+This architecture allows easy replacement with real AI providers such as:
+
+- OpenAI
+- Gemini
+- Claude
+
+---
+
+## Authorization Rules
+
+### Admin
+
+- View all tasks
+- Create tasks
+- Edit all tasks
+- Refresh AI summaries
+
+### User
+
+- View assigned tasks only
+- Edit assigned tasks only
+
+---
+
+## Filters
+
+Implemented using Eloquent Scopes:
+
+- Search Scope
+- Status Scope
+- Priority Scope
+
+---
+
+## UI Features
+
+- Responsive layout
+- Reusable Blade components
+- Tailwind CSS styling
+- Sidebar dashboard
+- Dynamic task statistics
+
+---
