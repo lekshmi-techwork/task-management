@@ -138,3 +138,10 @@ npm install
 npm run build
 php artisan serve
 ```
+
+## Test Credentials
+
+### Admin User
+
+Email: admin@example.com  
+Password: password
