@@ -55,4 +55,20 @@ class TaskService
     {
         return $this->userRepository->all();
     }
+
+    public function getDashboardStats(): array
+    {
+        return $this->taskRepository->getStats();
+    }
+
+    public function refreshAiSummary(Task $task): void
+    {
+        $aiData = $this->aiService
+            ->generateSummary($task);
+
+        $this->taskRepository->update(
+            $task->id,
+            $aiData
+        );
+    }
 }

@@ -56,4 +56,19 @@ class TaskRepository implements TaskRepositoryInterface
     {
         return $this->find($id)->delete();
     }
+
+    public function getStats(): array
+    {
+        $query = Task::query();
+
+        if (auth()->user()->role !== 'admin') {
+            $query->where('assigned_to', auth()->id());
+        }
+
+        return [
+            'total' => (clone $query)->count(),
+            'completed' => (clone $query)->where('status', 'completed')->count(),
+            'pending' => (clone $query)->where('status', 'pending')->count(),
+        ];
+    }
 }

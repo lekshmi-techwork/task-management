@@ -28,7 +28,9 @@ class TaskController extends Controller
             $request->only(['search', 'status', 'priority'])
         );
 
-        return view('tasks.index', compact('tasks'));
+        $stats = $this->taskService->getDashboardStats();
+
+        return view('tasks.index', compact('tasks', 'stats'));
     }
 
     /**
@@ -38,8 +40,8 @@ class TaskController extends Controller
     {
         $this->authorize('create', Task::class);
         $users = $this->taskService->getAssignableUsers();
-
-        return view('tasks.create', compact('users'));
+        $stats = $this->taskService->getDashboardStats();
+        return view('tasks.create', compact('users', 'stats'));
     }
 
     /**
@@ -64,7 +66,8 @@ class TaskController extends Controller
     {
         $task = $this->taskService->find($id);
         $this->authorize('view', $task);
-        return view('tasks.show', compact('task'));
+        $stats = $this->taskService->getDashboardStats();
+        return view('tasks.show', compact('task', 'stats'));
     }
 
     /**
@@ -75,8 +78,8 @@ class TaskController extends Controller
         $task = $this->taskService->find($id);
         $this->authorize('update', $task);
         $users = $this->taskService->getAssignableUsers();
-
-        return view('tasks.edit', compact('task', 'users'));
+        $stats = $this->taskService->getDashboardStats();
+        return view('tasks.edit', compact('task', 'users', 'stats'));
     }
 
     /**
@@ -104,5 +107,18 @@ class TaskController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function refreshAi(string $id)
+    {
+        $task = $this->taskService->find($id);
+
+        $this->authorize('update', $task);
+
+        $this->taskService->refreshAiSummary($task);
+
+        return redirect()
+            ->back()
+            ->with('success', 'AI summary refreshed successfully.');
     }
 }

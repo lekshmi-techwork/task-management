@@ -106,13 +106,7 @@
 
                 <aside class="col-span-12 lg:col-span-3">
                     <div class="space-y-6">
-                        <x-tasks.sidebar :show-refresh-ai="true" />
-
-                        <div class="bg-white rounded-xl shadow-lg p-4">
-                            <button class="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold px-4 py-3 rounded-lg">
-                                Refresh AI Summary
-                            </button>
-                        </div>
+                        <x-tasks.sidebar :task="$task" :stats="$stats" :show-refresh-ai="true" />
                     </div>
                 </aside>
             </div>

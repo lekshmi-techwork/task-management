@@ -16,9 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
 
+    if (auth()->check()) {
+        return redirect()->route('tasks.index');
+    }
+
+    return redirect()->route('login');
+});
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -31,6 +35,8 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('tasks', TaskController::class);
+    Route::post('/tasks/{task}/refresh-ai', [TaskController::class, 'refreshAi'])
+        ->name('tasks.refresh-ai');
 });
 
 require __DIR__ . '/auth.php';

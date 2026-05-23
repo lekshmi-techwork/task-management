@@ -38,7 +38,7 @@
                 </main>
 
                 <aside class="col-span-12 lg:col-span-3">
-                    <x-tasks.sidebar />
+                    <x-tasks.sidebar :stats="$stats" />
                 </aside>
             </div>
         </div>
