@@ -24,6 +24,8 @@ class TaskController extends Controller
      */
     public function index(Request $request)
     {
+        $this->authorize('viewAny', Task::class);
+
         $tasks = $this->taskService->getAll(
             $request->only(['search', 'status', 'priority'])
         );
